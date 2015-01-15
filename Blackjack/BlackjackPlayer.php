@@ -1,29 +1,14 @@
 <?php
-header ('Content-type: text/plain');
-include_once('Card.php');
-include_once('Hand.php');
+namespace LearnPhp\Blackjack;
+use LearnPhp\GoFish\Player;
 
-class Player {
-    protected $name;
+class BlackjackPlayer extends Player {
     protected $money;
-    protected $hand;
     protected $bet;
     
     public function __construct($name, $money) {
-        $this->name = $name;
+        parent::__construct($name);
         $this->money = $money;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-    
-    public function addCard(Card $card) {
-        $this->hand->addCard($card);
-    }
-
-    public function setHand(Hand $hand) {
-        $this->hand = $hand;
     }
 
     protected function collectWinnings($winnings) {
@@ -41,9 +26,4 @@ class Player {
     public function bust() {
         $this->money = $this->money - $bet;
     }
-
-    
-    
-    
-    
 }

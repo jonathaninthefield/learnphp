@@ -1,31 +1,35 @@
 <?php
-// header('Content-Type: text/plain');
-include_once('Card.php');
+namespace LearnPhp\Blackjack;
 
+/**
+ * Represents a standard 52-card deck.
+ * 
+ * Upon instantiation, all the cards will be in order.
+ */
 class Deck {
     protected $cards = array();
     
     public function __construct() {
         $suits = array("H", "S", "D", "C");
-        $numbers = array("A", "Q", "K", "J", 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        $numbers = array("A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K");
         foreach ($suits as $suit) {
             foreach ($numbers as $number) {
-                $card = new Card($number, $suit);
+                $card = $this->createCard($number, $suit);
                 $this->cards[] = $card;
             }
         }
-        shuffle($this->cards);
     }
     
-    public function shuffleDeck() {
+    protected function createCard($number, $suit) {
+        return new Card($number, $suit);
+    }
+    
+    public function shuffle() {
         shuffle($this->cards);
     }
 
     public function drawCard() {
-        $drawnIndex = array_rand($this->cards);
-        $drawnCard = $this->cards[$drawnIndex];
-        unset ($this->cards[$drawnIndex]);
-        return $drawnCard;
+        return array_pop($this->cards);
     }
     
     public function __toString() {
