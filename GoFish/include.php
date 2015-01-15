@@ -9,3 +9,5 @@ require('Player.php');
 require(ROOT . '/Blackjack/BlackjackPlayer.php');
 require('DealingService.php');
 require('Game.php');
+require('IoUtils.php');
+require('PlayGameCommand.php');
