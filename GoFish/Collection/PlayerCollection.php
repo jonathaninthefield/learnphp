@@ -5,7 +5,8 @@ use LearnPhp\GoFish\Player;
 /**
  * A collection of Player.
  */
-class PlayerCollection extends ArrayCollection {
+class PlayerCollection extends TypedCollection {
+    protected static $type = Player::KLASS;
     
     /**
      * Constructs the collection, initialized with $elements.
@@ -14,21 +15,6 @@ class PlayerCollection extends ArrayCollection {
     public function __construct($elements = array()) {
         parent::__construct($elements);
     }
-    
-    /**
-     * Enforces $element as Player.
-     * @param Player $element
-     * @return PlayerCollection
-     */
-    protected function enforceType(Player $element) {
-        if ($element instanceof Player) {
-            return $this;
-        }
-        
-        throw new \InvalidArgumentException(
-            "PlayerCollection expects a Player. Received: " . gettype($element)
-        );
-    }    
 
     /**
      * Returns the value at $offset.
@@ -45,7 +31,6 @@ class PlayerCollection extends ArrayCollection {
      * @param Player $value
      */
     public function offsetSet($offset, $value) {
-        $this->enforceType($value);
         parent::offsetSet($offset, $value);
     }
 
@@ -63,7 +48,6 @@ class PlayerCollection extends ArrayCollection {
      * @return PlayerCollection
      */
     public function push(Player $element) {
-        $this->enforceType($element);
         return parent::push($element);
     }
 }

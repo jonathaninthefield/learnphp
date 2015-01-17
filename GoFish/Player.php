@@ -4,6 +4,8 @@ use LearnPhp\Blackjack\Card;
 use LearnPhp\Blackjack\Hand;
 
 class Player {
+    const KLASS = __CLASS__;
+    
     protected $name;
     protected $hand;
     
