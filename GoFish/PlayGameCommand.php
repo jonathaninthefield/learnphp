@@ -3,6 +3,7 @@ namespace LearnPhp\GoFish;
 use LearnPhp\GoFish\Player;
 use LearnPhp\GoFish\Game;
 use LearnPhp\GoFish\Turn;
+use LearnPhp\Blackjack\Card;
 
 /**
  * Interacts with the user via I/O to play a game.
@@ -34,9 +35,22 @@ class PlayGameCommand {
         
         while ($turn = $game->nextTurn()) {
             $this->showHand($turn);
+            
             $askee = $this->promptAskee($turn);
             $requestedCard = $this->promptCard($turn);
-            $turn->ask($askee)->for($requestedCard);
+            
+            $surrendered = $turn->ask($askee)->for($requestedCard);
+            if ($surrendered) {
+                IoUtils::out(sprintf(
+                    "Awesome! %s had %d %s.",
+                    $askee, 
+                    $surrendered, 
+                    $requestedCard->getNumber(),
+                    $surrendered > 1 ? 's' : ''
+                ));
+            } else {
+                IoUtils::out("Go Fish! ");
+            }
         }
     }
     
@@ -52,9 +66,9 @@ class PlayGameCommand {
     }
     
     /**
-     * Gets an askee for $turn.
+     * Gets a Card for $turn.
      * @param Turn $turn
-     * @return Player
+     * @return Card
      */
     protected function promptCard(Turn $turn) {
         $asker = $turn->getAsker();
