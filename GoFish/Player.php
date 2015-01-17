@@ -27,4 +27,12 @@ class Player {
     public function setHand(Hand $hand) {
         $this->hand = $hand;
     }
+    
+    /**
+     * @return Hand
+     */
+    function getHand()
+    {
+        return $this->hand;
+    }
 }

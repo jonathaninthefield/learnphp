@@ -2,6 +2,12 @@
 namespace LearnPhp\GoFish;
 use LearnPhp\Blackjack\Hand;
 
+/**
+ * Go Fish
+ * 
+ * Played by 2-10 players. At the beginning of the game, 7 cards are dealt. If
+ *  there are more than 4 players, 5 cards are dealt.
+ */
 class Game {
     /**
      * @var Player[]
@@ -22,6 +28,11 @@ class Game {
      * @var bool
      */
     protected $inProgress = false;
+    
+    /**
+     * @var null|Turn The current turn.
+     */
+    protected $turn;
     
     public function __construct()
     {
@@ -48,6 +59,7 @@ class Game {
      * 
      * All players should be added at this point. Cards are dealt to each player
      *  and the first turn begins.
+     * @return Game
      */
     public function start() {
         if ($this->inProgress) {
@@ -66,6 +78,21 @@ class Game {
         $dealingService->deal();
         
         $this->inProgress = true;
+        reset($this->players);
+        return $this;
+    }
+    
+    /**
+     * @return bool|Turn
+     */
+    public function nextTurn() {
+        if (!$this->turn) {
+            $asker = $this->players[0];
+        } else {
+            $asker = next($this->players) ?: reset($this->players);
+        }
+        $next = new Turn($asker);
+        return $next;
     }
 }
 

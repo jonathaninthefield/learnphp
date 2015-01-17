@@ -1,8 +1,8 @@
 <?php
-
 namespace LearnPhp\Blackjack;
+use LearnPhp\Blackjack\Card;
 
-class Hand
+class Hand implements \Countable
 {
 
     protected $cards = array();
@@ -19,6 +19,11 @@ class Hand
                 unset($this->cards[$index]);
             }
         }
+    }
+    
+    public function getCards()
+    {
+        return $this->cards;
     }
 
     public function getValue()
@@ -42,6 +47,15 @@ class Hand
         return "Value: " . $this->getValue() . ' (' . implode(', ', $this->cards) . ')';
     }
 
+    /**
+     * Counts the cards in the hands.
+     * @param string $mode
+     * @return int
+     */
+    public function count($mode = 'COUNT_NORMAL')
+    {
+        return count($this->cards);
+    }
 }
 
 // $cards = array(
