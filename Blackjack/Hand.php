@@ -1,33 +1,30 @@
 <?php
+
 namespace LearnPhp\Blackjack;
+
 use LearnPhp\Blackjack\Card;
 
-class Hand implements \Countable
-{
+class Hand implements \Countable {
 
     protected $cards = array();
 
-    public function addCard(Card $card)
-    {
+    public function addCard(Card $card) {
         $this->cards[] = $card;
     }
 
-    public function removeCard(Card $card)
-    {
+    public function removeCard(Card $card) {
         foreach ($this->cards as $index => $handCard) {
             if ($handCard === $card) {
                 unset($this->cards[$index]);
             }
         }
     }
-    
-    public function getCards()
-    {
+
+    public function getCards() {
         return $this->cards;
     }
 
-    public function getValue()
-    {
+    public function getValue() {
         $sum = 0;
         foreach ($this->cards as $card) {
             $sum += $card->getValue();
@@ -35,15 +32,13 @@ class Hand implements \Countable
         return $sum;
     }
 
-    public function showHand()
-    {
+    public function showHand() {
         foreach ($this->cards as $card) {
             $card->toImage();
         }
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         return "Value: " . $this->getValue() . ' (' . implode(', ', $this->cards) . ')';
     }
 
@@ -52,10 +47,23 @@ class Hand implements \Countable
      * @param string $mode
      * @return int
      */
-    public function count($mode = 'COUNT_NORMAL')
-    {
+    public function count($mode = 'COUNT_NORMAL') {
         return count($this->cards);
     }
+
+    /**
+     * Gets and removes a random card from the hand.
+     * @return null|Card Null when there are no more cards.
+     */
+    public function getRandomCard() {
+        if (!$this->cards) {
+            return null;
+        }
+        $key = array_rand($this->cards);
+        unset($this->cards[$key]);
+        return $this->cards[$key];
+    }
+
 }
 
 // $cards = array(

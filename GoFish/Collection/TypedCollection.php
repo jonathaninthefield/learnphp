@@ -4,7 +4,7 @@ namespace LearnPhp\GoFish\Collection;
 /**
  * A collection with an enforced type.
  */
-class TypedCollection extends ArrayCollection {
+class TypedCollection extends LinkedListCollection {
     protected static $type = '\stdClass';
     
     public function __construct($elements = array()) {

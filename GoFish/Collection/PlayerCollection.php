@@ -8,6 +8,9 @@ use LearnPhp\GoFish\Player;
 class PlayerCollection extends TypedCollection {
     protected static $type = Player::KLASS;
     
+    
+    ### Below are overridden to assist IDE TypeHinting ###
+    
     /**
      * Constructs the collection, initialized with $elements.
      * @param Player[]|\Traversable $elements
@@ -49,5 +52,25 @@ class PlayerCollection extends TypedCollection {
      */
     public function push(Player $element) {
         return parent::push($element);
+    }
+    
+    /**
+     * Returns the first element from the collection.
+     * @return Player
+     */
+    public function first() {
+        return parent::first();
+    }
+    
+    /**
+     * Selects $num random elements as a collection.
+     * 
+     * Invoking this with $num == count() will effectively return a randomized
+     *  array.
+     * @param int $num The number of elements to select.
+     * @return PlayerCollection
+     */
+    public function random($num = 1) {
+        return parent::random($num);
     }
 }

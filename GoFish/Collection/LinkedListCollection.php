@@ -4,7 +4,7 @@ namespace LearnPhp\GoFish\Collection;
 /**
  * A generic collection.
  */
-class ArrayCollection implements \Iterator, \ArrayAccess, \Countable {
+class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
     /**
      * @var \SplDoublyLinkedList
      */
@@ -20,11 +20,56 @@ class ArrayCollection implements \Iterator, \ArrayAccess, \Countable {
             $this->merge($elements);
         }
     }
+    
+    /**
+     * Does the collection have any elements?
+     * @return bool
+     */
+    public function isEmpty() {
+        return count($this) === 0;
+    }
+    
+    /**
+     * Returns the first element from the collection.
+     * @return mixed
+     */
+    public function first() {
+        return $this->storage->bottom();
+    }
+    
+    /**
+     * Selects $num random elements as a collection.
+     * 
+     * Invoking this with $num == count() will effectively return a randomized
+     *  array.
+     * @param int $num The number of elements to select.
+     * @return LinkedListCollection
+     */
+    public function random($num = 1) {
+        /* Sebil <http://php.net/manual/en/function.array-rand.php#105265>
+         *  recommends using shuffle() rather than array_rand().
+         */
+        $array = $this->toArray();
+        shuffle($array);
+        return new static(array_slice($array, 0, $num));
+    }
+    
+    /**
+     * Returns the collection as an array.
+     * @return array
+     */
+    public function toArray() {
+        $return = array();
+        foreach ($this as $k => $v) {
+            $return[$k] = $v;
+        }
+        return $return;
+    }
 
     /**
      * Merges $elements into the collection.
      * @param \Traversable|array $elements
-     * @return \LearnPhp\GoFish\Collection\ArrayCollection
+     * @return \LearnPhp\GoFish\Collection\LinkedListCollection
      * @throws \InvalidArgumentException
      */
     public function merge($elements) {
@@ -124,7 +169,7 @@ class ArrayCollection implements \Iterator, \ArrayAccess, \Countable {
     /**
      * Adds $element to the collection.
      * @param mixed $element
-     * @return \LearnPhp\GoFish\Collection\ArrayCollection
+     * @return \LearnPhp\GoFish\Collection\LinkedListCollection
      */
     public function push($element) {
         $this->storage->push($element);
