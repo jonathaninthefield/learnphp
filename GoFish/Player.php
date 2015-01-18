@@ -2,8 +2,9 @@
 namespace LearnPhp\GoFish;
 use LearnPhp\Blackjack\Card;
 use LearnPhp\Blackjack\Hand;
-use LearnPhp\GoFish\Logic\ConsoleDecider;
 use LearnPhp\GoFish\Collection\PlayerCollection;
+use LearnPhp\GoFish\Logic\Decidable;
+use LearnPhp\GoFish\Logic\ConsoleDecider;
 
 class Player {
     const KLASS = __CLASS__;
@@ -22,7 +23,7 @@ class Player {
     
     /**
      * The decision maker for this Player.
-     * @var null|ConsoleDecider
+     * @var null|Decidable
      */
     protected $decider;
     
@@ -82,6 +83,16 @@ class Player {
     }
     
     /**
+     * Uses $decider as the decider.
+     * @param Decidable $decider
+     * @return \LearnPhp\GoFish\Player
+     */
+    public function setDecider(Decidable $decider) {
+        $this->decider = $decider;
+        return $this;
+    }
+    
+    /**
      * Chooses the Player to request a Card from.
      * @param PlayerCollection $players
      * @return Player
@@ -96,6 +107,16 @@ class Player {
      */
     public function chooseCard() {
         return $this->getDecider()->chooseCard();
+    }
+    
+    /**
+     * Removes and returns all cards matching $card's rank.
+     * @param Card $card
+     * @return null|Card[]
+     */
+    public function requestCards(Card $card) {
+        $surrendered = $this->hand->removeAllMatchingRank($card);
+        return $surrendered ?: null;
     }
     
     /**

@@ -2,6 +2,7 @@
 namespace LearnPhp\GoFish;
 use LearnPhp\Blackjack\Card;
 use LearnPhp\GoFish\Bot;
+use LearnPhp\GoFish\Pool;
 
 class Turn {
     /**
@@ -24,9 +25,9 @@ class Turn {
     
     /**
      * The cards the $askee surrendered.
-     * @var Card[]
+     * @var null|Card[]
      */
-    protected $surrenderedCards = array();
+    protected $surrenderedCards = null;
     
     /**
      * The card that was fished from the pool, if $askee didn't have a card of
@@ -35,9 +36,49 @@ class Turn {
      */
     protected $fishedCard;
     
-    public function __construct(Player $asker)
+    /**
+     * The Pool to fish from.
+     * @var Pool
+     */
+    protected $pool;
+    
+    public function __construct(Player $asker, Pool $pool)
     {
         $this->asker = $asker;
+        $this->pool = $pool;
+    }
+    
+    /**
+     * Gets the card the asker fished for.
+     * @return null|Card
+     */
+    public function getFishedCard() {
+        return $this->fishedCard;
+    }
+        
+    /**
+     * Sets $askee as the Player to ask for a card from.
+     * @param \LearnPhp\GoFish\Player $askee
+     * @return \LearnPhp\GoFish\Turn
+     */
+    public function ask(Player $askee) {
+        $this->askee = $askee;
+        return $this;
+    }
+    
+    /**
+     * Requests the askee for cards matching $card's rank.
+     * @param Card $card
+     * @return null|Card[]
+     */
+    public function forCard(Card $card) {
+        $this->requestedCard = $card;
+        $this->surrenderedCards = $this->askee->requestCards($card);
+        if (!$this->surrenderedCards) {
+            $this->fishedCard = $this->pool->fish();
+            $this->asker->addCard($this->fishedCard);
+        }
+        return $this->surrenderedCards;
     }
     
     /**

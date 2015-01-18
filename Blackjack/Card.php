@@ -112,7 +112,15 @@ class Card
     public function matches($value) {
         return strtoupper($value) === ($this->number . $this->suit);
     }
-
+    
+    /**
+     * Returns true if the card matches this one's value.
+     * @param Card $card
+     * @return bool
+     */
+    public function matchesRank(Card $card) {
+        return trim($this->getNumber()) === trim($card->getNumber());
+    }
 }
 
 // $suits = array("H", "S", "D", "C");

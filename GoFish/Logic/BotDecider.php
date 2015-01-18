@@ -1,6 +1,5 @@
 <?php
 namespace LearnPhp\GoFish\Logic;
-use LearnPhp\GoFish\Bot;
 use LearnPhp\GoFish\Collection\PlayerCollection;
 use LearnPhp\Blackjack\Card;
 use LearnPhp\GoFish\Player;
@@ -8,11 +7,11 @@ use LearnPhp\GoFish\Player;
 class BotDecider implements Decidable {
     /**
      * The bot making the decision.
-     * @var Bot
+     * @var Player
      */
     protected $bot;
     
-    public function __construct(Bot $bot) {
+    public function __construct(Player $bot) {
         $this->bot = $bot;
     }
     

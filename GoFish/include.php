@@ -29,6 +29,7 @@ require(ROOT . '/GoFish/Collection/PlayerCollection.php');
 
 require(ROOT . '/GoFish/Logic/Decidable.php');
 require(ROOT . '/GoFish/Logic/BotDecider.php');
+require(ROOT . '/GoFish/Logic/LoggedBotDecider.php');
 require(ROOT . '/GoFish/Logic/ConsoleDecider.php');
 require(ROOT . '/BlackJack/Card.php');
 require(ROOT . '/Blackjack/Deck.php');

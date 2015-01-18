@@ -5,6 +5,7 @@ use LearnPhp\GoFish\Game;
 use LearnPhp\GoFish\Turn;
 use LearnPhp\GoFish\Bot;
 use LearnPhp\GoFish\Lib\Prompter;
+use LearnPhp\GoFish\Logic\LoggedBotDecider;
 
 /**
  * Interacts with the user via I/O to play a game.
@@ -50,7 +51,7 @@ class PlayGameCommand {
             );
             $requestedCard = $this->currentTurn->getAsker()->chooseCard();
             
-            $surrendered = $this->currentTurn->ask($askee)->for($requestedCard);
+            $surrendered = $this->currentTurn->ask($askee)->forCard($requestedCard);
             if ($surrendered) {
                 $this->io->message(sprintf(
                     "Awesome! %s had %d %s.",
@@ -60,7 +61,7 @@ class PlayGameCommand {
                     $surrendered > 1 ? 's' : ''
                 ));
             } else {
-                $this->io->message("Go Fish! ");
+                $this->io->message("Go Fish! " . $this->currentTurn->getFishedCard());
             }
             exit;
         }
@@ -83,6 +84,10 @@ class PlayGameCommand {
         $players = array();
         $name = $this->io->prompt("Please enter your player name.");
         $players[] = $this->user = new Player($name);
+        if ($this->io instanceof Lib\FilePrompter) {
+            $decider = new LoggedBotDecider($this->user, $this->io);
+            $this->user->setDecider($decider);
+        }
         
         $message = "Enter another player name, or hit enter.";
         while ($name = $this->io->prompt($message)) {

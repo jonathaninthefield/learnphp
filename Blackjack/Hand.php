@@ -11,13 +11,36 @@ class Hand implements \Countable {
     public function addCard(Card $card) {
         $this->cards[] = $card;
     }
-
+    
+    /**
+     * Removes and returns all cards matching $card's rank.
+     * @param Card $card
+     * @return Card[]
+     */
+    public function removeAllMatchingRank(Card $card) {
+        $cards = array();
+        foreach ($this->cards as $k => $compare) {
+            if ($compare->matchesRank($card)) {
+                $cards[] = $compare;
+                unset($this->cards[$k]);
+            }
+        }
+        return $cards;
+    }
+    
+    /**
+     * Removes $card from the hand.
+     * @param Card $card
+     * @return null|Card
+     */
     public function removeCard(Card $card) {
         foreach ($this->cards as $index => $handCard) {
             if ($handCard === $card) {
                 unset($this->cards[$index]);
+                return $card;
             }
         }
+        return null;
     }
 
     public function getCards() {
@@ -60,8 +83,9 @@ class Hand implements \Countable {
             return null;
         }
         $key = array_rand($this->cards);
+        $card = $this->cards[$key];
         unset($this->cards[$key]);
-        return $this->cards[$key];
+        return $card;
     }
 
 }

@@ -95,7 +95,7 @@ class Game {
         } else {
             $asker = next($this->players) ?: reset($this->players);
         }
-        $next = new Turn($asker);
+        $next = new Turn($asker, $this->pool);
         return $next;
     }
 }
