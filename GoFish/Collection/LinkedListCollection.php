@@ -175,4 +175,27 @@ class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
         $this->storage->push($element);
         return $this;
     }
+    
+    /**
+     * Returns the index for $element.
+     * @param mixed $element
+     * @return null|int
+     */
+    public function getAt($element) {
+        foreach ($this->storage as $k => $v) {
+            if ($v == $element) {
+                return $k;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Determines if $element is contained in the collection.
+     * @param mixed $element
+     * @return bool
+     */
+    public function contains($element) {
+        return $this->getAt($element) !== null;
+    }
 }

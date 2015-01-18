@@ -29,11 +29,21 @@ class ConsoleIo {
     /**
      * Prompts the user for input with $message.
      * @param string $message
+     * @param null|callable $transformer Callback to transform; null to omit.
      * @return string The trimmed string input
      */
-    public function prompt($message ) {
+    public function prompt($message, callable $transformer = null) {
         $this->write($message);
-        return $this->read();
+        $value = $this->read();
+        if (!$transformer) {
+            return $value;
+        } 
+        
+        while (!($newValue = call_user_func($transformer, $value))) {
+            $this->writeln("That is an invalid value... $message");
+            $value = $this->read();
+        }
+        return $newValue;
     }
     
     /**

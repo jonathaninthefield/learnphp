@@ -103,6 +103,15 @@ class Card
     {
         return $this->number . $this->suit . ' (' . $this->value . ')';
     }
+    
+    /**
+     * Returns true if the card matches this one's value.
+     * @param string $value
+     * @return bool
+     */
+    public function matches($value) {
+        return strtoupper($value) === ($this->number . $this->suit);
+    }
 
 }
 
