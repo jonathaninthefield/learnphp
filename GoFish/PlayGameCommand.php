@@ -3,7 +3,8 @@ namespace LearnPhp\GoFish;
 use LearnPhp\GoFish\Player;
 use LearnPhp\GoFish\Game;
 use LearnPhp\GoFish\Turn;
-use LearnPhp\Blackjack\Card;
+use LearnPhp\GoFish\Lib\ConsoleIo;
+use LearnPhp\GoFish\Bot;
 
 /**
  * Interacts with the user via I/O to play a game.
@@ -24,24 +25,34 @@ class PlayGameCommand {
      */
     protected $currentTurn;
     
+    /**
+     * Console to read/write from.
+     * @var ConsoleIo
+     */
+    protected $io;
+    
+    public function __construct(ConsoleIo $io) {
+        $this->io = $io;
+    }
+    
     public function run() {
-        IoUtils::out("Let's play a game of Go Fish!");
+        $this->io->writeln("Let's play a game of Go Fish!");
         
-        $game = new Game();
+        $this->game = new Game();
         foreach ($this->promptPlayers() as $player) {
-            $game->addPlayer($player);
+            $this->game->addPlayer($player);
         }
-        $game->start();
+        $this->game->start();
         
-        while ($turn = $game->nextTurn()) {
-            $this->showHand($turn);
+        while ($this->currentTurn = $this->game->nextTurn()) {
+            $askee = $this->currentTurn->getAsker()->chooseAskee(
+                $this->getAskeesFor($this->currentTurn->getAsker())
+            );
+            $requestedCard = $this->currentTurn->getAsker()->chooseCard();
             
-            $askee = $this->promptAskee($turn);
-            $requestedCard = $this->promptCard($turn);
-            
-            $surrendered = $turn->ask($askee)->for($requestedCard);
+            $surrendered = $this->currentTurn->ask($askee)->for($requestedCard);
             if ($surrendered) {
-                IoUtils::out(sprintf(
+                $this->io->writeln(sprintf(
                     "Awesome! %s had %d %s.",
                     $askee, 
                     $surrendered, 
@@ -49,8 +60,9 @@ class PlayGameCommand {
                     $surrendered > 1 ? 's' : ''
                 ));
             } else {
-                IoUtils::out("Go Fish! ");
+                $this->io->writeln("Go Fish! ");
             }
+            exit;
         }
     }
     
@@ -60,71 +72,20 @@ class PlayGameCommand {
      * @return Player[]
      */
     protected function getAskeesFor(Player $player) {
-        return array_diff(
-            $this->game->getPlayers(), array($player)
-        );
-    }
-    
-    /**
-     * Gets a Card for $turn.
-     * @param Turn $turn
-     * @return Card
-     */
-    protected function promptCard(Turn $turn) {
-        $asker = $turn->getAsker();
-        if ($asker instanceof Bot) {
-            return $asker->chooseCard();
-        }
-        
-        return IoUtils::prompt(sprintf(
-            "What card do you want to ask %s for? [%s]",
-            $turn->getAskee(),
-            implode(', ', $asker->getHand()->getCards())
-        ));
-    }
-    
-    /**
-     * Gets an askee for $turn.
-     * @param Turn $turn
-     * @return Player
-     */
-    protected function promptAskee(Turn $turn) {
-        $asker = $turn->getAsker();
-        if ($asker instanceof Bot) {
-            return $asker->chooseAskee($this->getAskeesFor($asker));
-        }
-        
-        $askees = implode("\n\t- ", $this->getAskeesFor($asker));
-        return IoUtils::prompt("Who would you like to ask?\n\t- $askees");
-    }
-    
-    /**
-     * Shows the $asker's hand.
-     * @return \LearnPhp\GoFish\PlayGameCommand
-     */
-    protected function showHand(Turn $turn) {
-        $count = count($this->user->getHand());
-        $cards = implode(' ', $this->user->getHand()->getCards());
-        if ($turn->isPlayedByBot()) {
-            $cards = preg_replace('/\S/', '*', $cards);
-        }
-        IoUtils::out(
-            $turn->getAsker() . "'s cards: $cards ($count)\n"
-        );
-        return $this;
+        return $this->game->getPlayers()->diff(array($player));
     }
     
     /**
      * Prompts the user for player names.
-     * @return \LearnPhp\GoFish\Bot[]
+     * @return \LearnPhp\GoFish\Player[]
      */
     protected function promptPlayers() {
         $players = array();
-        $name = IoUtils::prompt("Please enter your player name.");
+        $name = $this->io->prompt("Please enter your player name.");
         $players[] = $this->user = new Player($name);
         
         $message = "Enter another player name, or hit enter.";
-        while ($name = IoUtils::prompt($message)) {
+        while ($name = $this->io->prompt($message)) {
             $players[] = new Bot($name);
         }
         return $players;

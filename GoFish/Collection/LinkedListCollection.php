@@ -1,5 +1,6 @@
 <?php
 namespace LearnPhp\GoFish\Collection;
+use LearnPhp\GoFish\Lib\ArrayUtils;
 
 /**
  * A generic collection.
@@ -73,17 +74,12 @@ class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
      * @throws \InvalidArgumentException
      */
     public function merge($elements) {
-        if (!is_array($elements) && !($elements instanceof \Traversable)) {
-            throw new \InvalidArgumentException(
-                "Expected Traversable or array. Received: " . gettype($elements)
-            );
-        }
+        ArrayUtils::assertTraversable($elements);
         foreach ($elements as $element) {
             $this->push($element);
         }
         return $this;
     }
-    
 
     /**
      * Does an element exist at $offset?
@@ -100,7 +96,7 @@ class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
      * @return mixed
      */
     public function offsetGet($offset) {
-        return $this->offsetGet($offset);
+        return $this->storage->offsetGet($offset);
     }
 
     /**
@@ -109,7 +105,7 @@ class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
      * @param mixed $value
      */
     public function offsetSet($offset, $value) {
-        $this->offsetSet($offset, $value);
+        $this->storage->offsetSet($offset, $value);
     }
 
     /**
@@ -197,5 +193,17 @@ class LinkedListCollection implements \Iterator, \ArrayAccess, \Countable {
      */
     public function contains($element) {
         return $this->getAt($element) !== null;
+    }
+    
+    /**
+     * Returns a new collection without elements from $elements.
+     * @param array|\Traversable $elements
+     * @return LinkedListedCollection
+     * @throws \InvalidArgumentException
+     */
+    public function diff($elements) {
+        return new static(
+            array_diff($this->toArray(), ArrayUtils::toArray($elements))
+        );
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace LearnPhp\GoFish\Logic;
+use LearnPhp\GoFish\Collection\PlayerCollection;
 
 interface Decidable {
     /**

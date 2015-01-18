@@ -1,9 +1,13 @@
 <?php
 require('include.php');
 use LearnPhp\GoFish\PlayGameCommand;
-use LearnPhp\GoFish\IoUtils;
+use LearnPhp\GoFish\Lib\ConsoleIo;
 
-$command = new PlayGameCommand();
-$command->run();
-
-IoUtils::finish();
+$io = new ConsoleIo();
+try {
+    $command = new PlayGameCommand($io);
+    $command->run();
+} catch (\Exception $ex) {
+    $io->writeln($ex->getMessage(), true);
+    $io->writeln($ex->getTraceAsString(), true);
+}

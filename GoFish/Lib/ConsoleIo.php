@@ -11,7 +11,11 @@ class ConsoleIo {
      */
     protected static $singleton;
     
-    public function instance() {
+    /**
+     * Gets the singleton.
+     * @return ConsoleIo
+     */
+    public static function instance() {
         if (static::$singleton) {
             return static::$singleton;
         }
@@ -49,19 +53,21 @@ class ConsoleIo {
     /**
      * Echoes $str to the console.
      * @param string $str
+     * @param bool $isError If true, output is written to \STDERR.
      * @return ConsoleIo
      */
-    public function write($str) {
-        fwrite(\STDOUT, $str);
+    public function write($str, $isError = false) {
+        fwrite(\STDERR, $str);
         return $this;
     }
     
     /**
      * Writes $str with a newline.
      * @param string $str
+     * @param bool $isError If true, output is written to \STDERR.
      * @return ConsoleIo
      */
-    public function writeln($str) {
+    public function writeln($str, $isError = false) {
         $this->write($str . "\n");
         return $this;
     }

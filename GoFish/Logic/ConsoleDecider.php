@@ -21,9 +21,9 @@ class ConsoleDecider implements Decidable {
      */
     protected $io;
     
-    public function __construct(Player $player, ConsoleIo $io) {
+    public function __construct(Player $player, ConsoleIo $io = null) {
         $this->player = $player;
-        $this->io = $io;
+        $this->io = $io ?: ConsoleIo::instance();
     }
     
     /**
@@ -41,7 +41,7 @@ class ConsoleDecider implements Decidable {
             return $players->first();
         }
         
-        $askees = implode("\n\t- ", $players);
+        $askees = $players->join("\n\t- ");
         return $this->io->prompt(
             "Who would you like to ask?\n\t- $askees", function($value) use ($players) {
             foreach ($players as $player) {

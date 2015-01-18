@@ -49,4 +49,14 @@ class TypedCollection extends LinkedListCollection {
         $this->enforceType($element);
         return parent::push($element);
     }
+    
+    /**
+     * Returns a new collection without elements from $elements.
+     * @param array|\Traversable $elements
+     * @return TypedCollection
+     * @throws \InvalidArgumentException
+     */
+    public function diff($elements) {
+        return parent::diff($elements);
+    }
 }

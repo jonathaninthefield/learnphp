@@ -50,7 +50,7 @@ class PlayerCollection extends TypedCollection {
      * @param Player $element
      * @return PlayerCollection
      */
-    public function push(Player $element) {
+    public function push($element) {
         return parent::push($element);
     }
     
@@ -72,5 +72,24 @@ class PlayerCollection extends TypedCollection {
      */
     public function random($num = 1) {
         return parent::random($num);
+    }
+    
+    /**
+     * Returns a new collection without elements from $elements.
+     * @param array|\Traversable $elements
+     * @return PlayerCollection
+     * @throws \InvalidArgumentException
+     */
+    public function diff($elements) {
+        return parent::diff($elements);
+    }
+    
+    /**
+     * Joins the collection values together with $glue as a string.
+     * @param string $glue
+     * @return string
+     */
+    public function join($glue) {
+        return implode($glue, $this->toArray());
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace LearnPhp\GoFish;
+use LearnPhp\GoFish\Collection\PlayerCollection;
 
 class DealingService {
     /**
@@ -8,18 +9,13 @@ class DealingService {
     protected $pool;
     
     /**
-     * @var Player[]
+     * @var Player[]|PlayerCollection
      */
-    protected $players = array();
+    protected $players;
     
-    public function __construct(Pool $pool, array $players) {
+    public function __construct(Pool $pool, PlayerCollection $players) {
         $this->pool = $pool;
         $this->players = $players;
-        foreach ($players as $player) {
-            if (!($player instanceof Player)) {
-                throw new \Exception("Players must be instances of Player.");
-            }
-        }
     }
     
     /**

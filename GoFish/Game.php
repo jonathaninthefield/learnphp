@@ -1,6 +1,7 @@
 <?php
 namespace LearnPhp\GoFish;
 use LearnPhp\Blackjack\Hand;
+use LearnPhp\GoFish\Collection\PlayerCollection;
 
 /**
  * Go Fish
@@ -10,9 +11,9 @@ use LearnPhp\Blackjack\Hand;
  */
 class Game {
     /**
-     * @var Player[]
+     * @var Player[]|PlayerCollection
      */
-    protected $players = array();
+    protected $players;
     
     /**
      * @var Pool
@@ -37,17 +38,20 @@ class Game {
     public function __construct()
     {
         $this->pool = new Pool();
+        $this->players = new PlayerCollection();
     }
     
     /**
      * @param Player $player
+     * @return Game
      */
     public function addPlayer(Player $player) {
         $this->players[] = $player;
+        return $this;
     }
     
     /**
-     * @return Player[]
+     * @return Player[]|PlayerCollection
      */
     public function getPlayers()
     {
