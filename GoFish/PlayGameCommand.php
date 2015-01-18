@@ -3,8 +3,8 @@ namespace LearnPhp\GoFish;
 use LearnPhp\GoFish\Player;
 use LearnPhp\GoFish\Game;
 use LearnPhp\GoFish\Turn;
-use LearnPhp\GoFish\Lib\ConsoleIo;
 use LearnPhp\GoFish\Bot;
+use LearnPhp\GoFish\Lib\Prompter;
 
 /**
  * Interacts with the user via I/O to play a game.
@@ -26,17 +26,17 @@ class PlayGameCommand {
     protected $currentTurn;
     
     /**
-     * Console to read/write from.
-     * @var ConsoleIo
+     * Object to read/write from.
+     * @var Prompter
      */
     protected $io;
     
-    public function __construct(ConsoleIo $io) {
+    public function __construct(Prompter $io) {
         $this->io = $io;
     }
     
     public function run() {
-        $this->io->writeln("Let's play a game of Go Fish!");
+        $this->io->message("Let's play a game of Go Fish!");
         
         $this->game = new Game();
         foreach ($this->promptPlayers() as $player) {
@@ -52,7 +52,7 @@ class PlayGameCommand {
             
             $surrendered = $this->currentTurn->ask($askee)->for($requestedCard);
             if ($surrendered) {
-                $this->io->writeln(sprintf(
+                $this->io->message(sprintf(
                     "Awesome! %s had %d %s.",
                     $askee, 
                     $surrendered, 
@@ -60,7 +60,7 @@ class PlayGameCommand {
                     $surrendered > 1 ? 's' : ''
                 ));
             } else {
-                $this->io->writeln("Go Fish! ");
+                $this->io->message("Go Fish! ");
             }
             exit;
         }

@@ -4,7 +4,7 @@ namespace LearnPhp\GoFish\Lib;
 /**
  * Reads/writes to the console.
  */
-class ConsoleIo {
+class ConsoleIo implements Prompter {
     /**
      * Provides an instance for a global scope.
      * @var ConsoleIo
@@ -69,6 +69,17 @@ class ConsoleIo {
      */
     public function writeln($str, $isError = false) {
         $this->write($str . "\n");
+        return $this;
+    }
+    
+    /**
+     * Sends $str message.
+     * @param string $str
+     * @param bool $isError
+     * @return ConsoleIo
+     */
+    public function message($str, $isError = false) {
+        $this->writeln($str, $isError);
         return $this;
     }
 }

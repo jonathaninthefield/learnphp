@@ -10,6 +10,8 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 set_error_handler("exception_error_handler");
 
 define('ROOT', dirname(__DIR__));
+require(ROOT . '/GoFish/Lib/Prompter.php');
+require(ROOT . '/GoFish/Lib/FilePrompter.php');
 require(ROOT . '/GoFish/Lib/ConsoleIo.php');
 
 register_shutdown_function(function() {
