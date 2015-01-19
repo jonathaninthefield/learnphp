@@ -1,6 +1,6 @@
 <?php
 namespace LearnPhp\GoFish;
-use LearnPhp\Blackjack\Hand;
+use LearnPhp\GoFish\Hand;
 use LearnPhp\GoFish\Collection\PlayerCollection;
 
 /**
@@ -87,16 +87,101 @@ class Game {
     }
     
     /**
+     * Determines the winner of the game.
+     * @return Player
+     * @throws \LogicException
+     */
+    public function getWinner() {
+        if ($this->inProgress) {
+            throw new \LogicException(
+                "Winner cannot be chosen while game is in progress."
+            );
+        }
+        
+        $winner = null;
+        foreach ($this->players as $player) {
+            if (!$winner) {
+                $winner = $player;
+                continue;
+            } else if ($player->score() === $winner->score()) {
+                if (count($player->getHand()) < count($winner->getHand())) {
+                    $winner = $player;
+                    continue;
+                }
+            } else if ($player->score() > $winner->score()) {
+                $winner = $player;
+            }
+        }
+        return $winner;
+    }
+    
+    /**
      * @return bool|Turn
      */
     public function nextTurn() {
-        if (!$this->turn) {
-            $asker = $this->players[0];
-        } else {
-            $asker = next($this->players) ?: reset($this->players);
+        if (!$this->inProgress) {
+            return false;
         }
-        $next = new Turn($asker, $this->pool);
-        return $next;
+        
+        $asker = $this->findNextAsker();
+        if (!$asker) {
+            $this->inProgress = false;
+            return false;
+        }
+        return $this->turn = new Turn($asker, $this->pool);
+    }
+    
+    /**
+     * @return Pool
+     */
+    public function getPool() {
+        return $this->pool;
+    }
+        
+    /**
+     * Finds the next Player who can ask.
+     * @return null|Player
+     */
+    protected function findNextAsker() {
+        if (!$this->turn) {
+            return $this->players[0];
+        } else if (!count($this->pool)) {
+            return null;
+        }
+        $last = $this->turn->getAsker();
+        $marker = null;
+        foreach ($this->players as $k => $v) {
+            if ($last == $v) {
+                $marker = $k;
+                continue;
+            }
+            if ($this->canPlay($v)) {
+                return $v;
+            }
+        }
+        foreach ($this->players as $k => $v) {
+            if ($marker === $k) {
+                return null;
+            }
+            if ($this->canPlay($v)) {
+                return $v;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Determines if $player can play.
+     * @param \LearnPhp\GoFish\Player $player
+     * @return boolean
+     */
+    protected function canPlay(Player $player) {
+        if (!$this->inProgress) {
+            return false;
+        } else if ($player->getHand()->isOuttaCards()) {
+            return false;
+        }
+        return true;
     }
 }
 

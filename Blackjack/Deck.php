@@ -6,7 +6,7 @@ namespace LearnPhp\Blackjack;
  * 
  * Upon instantiation, all the cards will be in order.
  */
-class Deck {
+class Deck implements \Countable {
     protected $cards = array();
     
     public function __construct() {
@@ -34,6 +34,10 @@ class Deck {
     
     public function __toString() {
         return "Deck card order is now: " . implode(', ', $this->cards) . ')';
+    }
+    
+    public function count($mode = 'COUNT_NORMAL') {
+        return count($this->cards);
     }
 }
     

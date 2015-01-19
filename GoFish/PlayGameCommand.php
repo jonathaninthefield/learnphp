@@ -36,6 +36,10 @@ class PlayGameCommand {
         $this->io = $io;
     }
     
+    /**
+     * Runs a round of GoFish
+     * @return \LearnPhp\GoFish\PlayGameCommand
+     */
     public function run() {
         $this->io->message("Let's play a game of Go Fish!");
         
@@ -66,6 +70,12 @@ class PlayGameCommand {
                 $this->io->message("$asker drew a ". $this->currentTurn->getFishedCard());
             }
         }
+        
+        $winner = $this->game->getWinner();
+        $this->io->message(
+             "$winner won the game with " . $winner->score() . " books!"
+        );
+        return $this;
     }
     
     /**

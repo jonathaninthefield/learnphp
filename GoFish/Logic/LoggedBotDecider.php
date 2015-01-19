@@ -25,7 +25,9 @@ class LoggedBotDecider extends \LearnPhp\GoFish\Logic\BotDecider {
     public function chooseAskee(PlayerCollection $players) {
         $return = parent::chooseAskee($players);
         $askees = $players->join("\n\t- ");
-        $this->prompter->message("Who would you like to ask?\n\t- $askees");
+        $this->prompter->message(
+            $this->bot . ", who would you like to ask?\n\t- $askees"
+        );
         $this->prompter->message("> " . $return);
         return $return;
     }

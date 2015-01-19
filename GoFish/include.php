@@ -27,6 +27,7 @@ require(ROOT . '/GoFish/Collection/LinkedListCollection.php');
 require(ROOT . '/GoFish/Collection/TypedCollection.php');
 require(ROOT . '/GoFish/Collection/PlayerCollection.php');
 
+require(ROOT . '/GoFish/Scorable.php');
 require(ROOT . '/GoFish/Logic/Decidable.php');
 require(ROOT . '/GoFish/Logic/BotDecider.php');
 require(ROOT . '/GoFish/Logic/LoggedBotDecider.php');
@@ -35,6 +36,7 @@ require(ROOT . '/BlackJack/Card.php');
 require(ROOT . '/Blackjack/Deck.php');
 require('Pool.php');
 require(ROOT . '/Blackjack/Hand.php');
+require(ROOT . '/GoFish/Hand.php');
 require('Player.php');
 require('Bot.php');
 require('Turn.php');

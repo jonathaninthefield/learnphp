@@ -1,12 +1,11 @@
 <?php
 namespace LearnPhp\GoFish;
 use LearnPhp\Blackjack\Card;
-use LearnPhp\Blackjack\Hand;
 use LearnPhp\GoFish\Collection\PlayerCollection;
 use LearnPhp\GoFish\Logic\Decidable;
 use LearnPhp\GoFish\Logic\ConsoleDecider;
 
-class Player {
+class Player implements Scorable {
     const KLASS = __CLASS__;
     
     /**
@@ -137,5 +136,9 @@ class Player {
      */
     public function __toString() {
         return $this->getName();
+    }
+    
+    public function score() {
+        return $this->getHand()->score();
     }
 }
