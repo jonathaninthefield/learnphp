@@ -51,6 +51,19 @@ class Player {
             );
         }
         $this->hand->addCard($card);
+        return $this;
+    }
+    
+    /**
+     * Adds $cards to the Player's Hand.
+     * @param Card[] $cards
+     * @return \LearnPhp\GoFish\Player
+     */
+    public function addCards(array $cards) {
+        foreach ($cards as $card) {
+            $this->addCard($card);
+        }
+        return $this;
     }
 
     /**

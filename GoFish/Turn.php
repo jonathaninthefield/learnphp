@@ -77,6 +77,8 @@ class Turn {
         if (!$this->surrenderedCards) {
             $this->fishedCard = $this->pool->fish();
             $this->asker->addCard($this->fishedCard);
+        } else {
+            $this->asker->addCards($this->surrenderedCards);
         }
         return $this->surrenderedCards;
     }

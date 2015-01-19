@@ -46,10 +46,11 @@ class PlayGameCommand {
         $this->game->start();
         
         while ($this->currentTurn = $this->game->nextTurn()) {
-            $askee = $this->currentTurn->getAsker()->chooseAskee(
+            $asker = $this->currentTurn->getAsker();
+            $askee = $asker->chooseAskee(
                 $this->getAskeesFor($this->currentTurn->getAsker())
             );
-            $requestedCard = $this->currentTurn->getAsker()->chooseCard();
+            $requestedCard = $asker->chooseCard();
             
             $surrendered = $this->currentTurn->ask($askee)->forCard($requestedCard);
             if ($surrendered) {
@@ -61,9 +62,9 @@ class PlayGameCommand {
                     $surrendered > 1 ? 's' : ''
                 ));
             } else {
-                $this->io->message("Go Fish! " . $this->currentTurn->getFishedCard());
+                $this->io->message("Go Fish!");
+                $this->io->message("$asker drew a ". $this->currentTurn->getFishedCard());
             }
-            return;
         }
     }
     
