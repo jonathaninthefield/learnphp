@@ -63,7 +63,7 @@ class PlayGameCommand {
             } else {
                 $this->io->message("Go Fish! " . $this->currentTurn->getFishedCard());
             }
-            exit;
+            return;
         }
     }
     

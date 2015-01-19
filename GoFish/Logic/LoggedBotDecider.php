@@ -24,7 +24,9 @@ class LoggedBotDecider extends \LearnPhp\GoFish\Logic\BotDecider {
      */
     public function chooseAskee(PlayerCollection $players) {
         $return = parent::chooseAskee($players);
-        $this->prompter->message("Chose to ask " . $return);
+        $askees = $players->join("\n\t- ");
+        $this->prompter->message("Who would you like to ask?\n\t- $askees");
+        $this->prompter->message("> " . $return);
         return $return;
     }
     
@@ -33,8 +35,11 @@ class LoggedBotDecider extends \LearnPhp\GoFish\Logic\BotDecider {
      * @return null|Card Returns null when there are no more cards to choose.
      */
     public function chooseCard() {
+        $cards = $this->bot->getHand()->getCards();
+        $select = implode(', ', $cards);
+        $this->prompter->message("Which card would you like to ask for? [$select]");
         $return = parent::chooseCard();
-        $this->prompter->message("Chose to ask for $return");
+        $this->prompter->message("> $return");
         return $return;
     }
 }

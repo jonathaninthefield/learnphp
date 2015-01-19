@@ -1,5 +1,6 @@
 <?php
 namespace LearnPhp\GoFish\Lib;
+use LearnPhp\GoFish\Lib\ConsoleIo;
 
 /**
  * Reads input from a file and outputs to another file.
@@ -33,6 +34,14 @@ class FilePrompter implements Prompter {
     }
     
     /**
+     * Gets all output written to the FilePrompter.
+     * @return string
+     */
+    public function getOutput() {
+        return file_get_contents($this->outFile->getPathname());
+    }
+    
+    /**
      * Writes the output to the next line of the file.
      * @param string $output
      * @return \LearnPhp\GoFish\Lib\FilePrompter
@@ -49,7 +58,9 @@ class FilePrompter implements Prompter {
      */
     public function prompt($str) {
         $this->write($str);
-        return $this->read();
+        $input = $this->read();
+        $this->write("> $input\n");
+        return $input;
     }
     
     /**
@@ -61,6 +72,17 @@ class FilePrompter implements Prompter {
     public function message($str, $isError = false) {
         $prefix = !$isError ? '' : '[ERROR:] ';
         $this->write($prefix . $str);
+        return $this;
+    }
+    
+    /**
+     * Finishes the output file and writes it to $console.
+     * @param ConsoleIo $console
+     * @return \LearnPhp\GoFish\Lib\FilePrompter
+     */
+    public function finish(ConsoleIo $console) {
+        $this->write("Game finished!\n");
+        $console->message($this->getOutput());
         return $this;
     }
 }

@@ -14,13 +14,13 @@ require(ROOT . '/GoFish/Lib/Prompter.php');
 require(ROOT . '/GoFish/Lib/FilePrompter.php');
 require(ROOT . '/GoFish/Lib/ConsoleIo.php');
 
-register_shutdown_function(function() {
-    foreach (debug_backtrace() as $line) {
-        \LearnPhp\GoFish\Lib\ConsoleIo::instance()->writeln(
-            print_r($line, true)
-        );
-    }
-});
+//register_shutdown_function(function() {
+//    foreach (debug_backtrace() as $line) {
+//        \LearnPhp\GoFish\Lib\ConsoleIo::instance()->writeln(
+//            print_r($line, true)
+//        );
+//    }
+//});
 
 require(ROOT . '/GoFish/Lib/ArrayUtils.php');
 require(ROOT . '/GoFish/Collection/LinkedListCollection.php');
